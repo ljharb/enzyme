@@ -1059,6 +1059,24 @@ describeWithDOM('mount', () => {
       expect(spy.callCount).to.equal(2);
     });
 
+    it('issue #1413', () => {
+      function Foo() {
+        return (
+          <span className="rfSI" style={undefined} title={undefined} onClick={undefined} onMouseDown={undefined} onMouseUp={undefined}>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <title />
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+            </svg>
+          </span>
+        );
+      }
+      const wrapper = mount(<Foo />);
+      wrapper.findWhere((node) => {
+        expect(node).to.have.lengthOf(1);
+        expect(() => node.props()).not.to.throw();
+      });
+    });
   });
 
   describe('.setProps(newProps[, callback])', () => {
